@@ -39,7 +39,9 @@ git clone https://github.com/PythDani/test-posts.git
 ```
 
 En la raiz del proyecto donde se encuentra el archivo docker-compose.yml ejecutamos:
-
+```bash
+cd test-posts/
+```
 
 ```bash
 docker-compose up --build
