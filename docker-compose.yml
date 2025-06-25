@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  # Base de datos del microservicio de autenticación
+  auth-postgres:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_DB: auth_db
+      POSTGRES_USER: auth_user
+      POSTGRES_PASSWORD: secret
+    volumes:
+      - auth_pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  # Microservicio de autenticación
+  auth-service:
+    build: ./user-auth-microservice
+    restart: always
+    environment:
+      - DB_HOST=auth-postgres
+      - DB_PORT=5432
+      - DB_USERNAME=auth_user
+      - DB_PASSWORD=secret
+      - DB_NAME=auth_db
+      - JWT_SECRET=supersecretkey
+      - JWT_EXPIRES_IN=3600s
+    ports:
+      - "3000:3000"
+    depends_on:
+      - auth-postgres
+
+  # Base de datos del microservicio de publicaciones
+  posts-postgres:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_DB: posts_db
+      POSTGRES_USER: posts_user
+      POSTGRES_PASSWORD: secret
+    volumes:
+      - posts_pgdata:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+
+  # Microservicio de publicaciones
+  posts-service:
+    build: ./user-post-microservice
+    restart: always
+    environment:
+      - DB_HOST=posts-postgres
+      - DB_PORT=5432
+      - DB_USERNAME=posts_user
+      - DB_PASSWORD=secret
+      - DB_NAME=posts_db
+      - JWT_SECRET=supersecretkey
+      - JWT_EXPIRES_IN=3600s
+    ports:
+      - "3001:3001"
+    depends_on:
+      - posts-postgres
+      - auth-service
+
+volumes:
+  auth_pgdata:
+  posts_pgdata:

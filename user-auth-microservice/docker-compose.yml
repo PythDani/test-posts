@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_DB: auth_db
+      POSTGRES_USER: auth_user
+      POSTGRES_PASSWORD: secret
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  auth-service:
+    build: .
+    restart: always
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USERNAME=auth_user
+      - DB_PASSWORD=secret
+      - DB_NAME=auth_db
+      - JWT_SECRET=supersecretkey
+      - JWT_EXPIRES_IN=3600s
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+
+volumes:
+  pgdata:
