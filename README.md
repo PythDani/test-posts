@@ -68,7 +68,10 @@ npm run dev
 Por defecto se abrirá en `http://localhost:5173`.
 
 ---
-
+Puedes Hacer login con 
+username: nella
+password: admin
+## NOTA: Todos los usuarios que se crean inicialmente tienen el password admin
 ## 📦 Variables de Entorno (ejemplo para backend)
 
 Para cada microservicio NestJS (`users-auth-microservice`, `user-post-microservice`), puedes incluir un `.env` similar al siguiente:
