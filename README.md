@@ -29,10 +29,17 @@ Este proyecto es una red social minimalista con funcionalidades básicas como cr
 ## 🐳 Levantar el Backend (NestJS)
 
 El backend está compuesto por dos microservicios:
-- `users-service`: Gestión de usuarios y autenticación.
-- `posts-service`: Gestión de publicaciones y likes.
+- `user-auth-microservice`: Gestión de usuarios y autenticación.
+- `user-post-microservice`: Gestión de publicaciones y likes.
 
 Usamos Docker para levantar toda la infraestructura del backend:
+
+```bash
+git clone https://github.com/PythDani/test-posts.git
+```
+
+En la raiz del proyecto donde se encuentra el archivo docker-compose.yml ejecutamos:
+
 
 ```bash
 docker-compose up --build
@@ -41,7 +48,8 @@ docker-compose up --build
 Esto iniciará:
 - Microservicio de usuarios (puerto `3000`)
 - Microservicio de posts (puerto `3001`)
-- Base de datos PostgreSQL (puerto `5432`)
+- Base de datos PostgreSQL (puerto `5432`) usuarios
+- Base de datos PostgreSQL (puerto `5433`) posts
 
 > Asegúrate de que los puertos no estén en uso y de tener configurados los archivos `.env` en cada microservicio si son requeridos.
 
@@ -63,7 +71,7 @@ Por defecto se abrirá en `http://localhost:5173`.
 
 ## 📦 Variables de Entorno (ejemplo para backend)
 
-Para cada microservicio NestJS (`users-service`, `posts-service`), puedes incluir un `.env` similar al siguiente:
+Para cada microservicio NestJS (`users-auth-microservice`, `user-post-microservice`), puedes incluir un `.env` similar al siguiente:
 (Se envían arcivos .env en cada microservicio)
 
 
