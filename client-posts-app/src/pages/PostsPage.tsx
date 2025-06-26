@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 import type { Post } from "./Post";
 import PostComponent from "../components/PostComponent";
 import { MdOutlinePostAdd } from "react-icons/md";
+import endpoints from "../services/paths/paths";
 
 export default function PostsPage() {
   const { token } = useAuth();
@@ -19,7 +20,7 @@ export default function PostsPage() {
   const handleLike = async (postId: number) => {
     if (liked[postId]) return;
     try {
-      await fetch(`http://localhost:3001/posts/${postId}/like`, {
+      await fetch(endpoints.posts.like(postId), {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -35,7 +36,7 @@ export default function PostsPage() {
   const handleCreatePost = async () => {
     if (!newMessage.trim()) return;
     try {
-      const res = await fetch("http://localhost:3001/posts/create", {
+      const res = await fetch(endpoints.posts.create, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -44,7 +45,7 @@ export default function PostsPage() {
         body: JSON.stringify({ message: newMessage }),
       });
       const data = await res.json();
-      const userRes = await fetch(`http://localhost:3000/users/${data.userId}`);
+      const userRes = await fetch(endpoints.users.getOne(data.userId));
       if (!userRes.ok) throw new Error("No se pudo obtener el usuario");
 
       const user = await userRes.json();
@@ -68,7 +69,7 @@ export default function PostsPage() {
   };
 
   const fetchPosts = async () => {
-    const res = await fetch("http://localhost:3001/posts/all");
+    const res = await fetch(endpoints.posts.getAll);
     const data = await res.json();
     setPosts(data);
     const initialLikes: Record<number, boolean> = {};

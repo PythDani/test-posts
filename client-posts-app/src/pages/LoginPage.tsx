@@ -4,6 +4,7 @@ import { loginService } from "../services/auth";
 import { useAuth } from "../context/AuthContext";
 import { jwtDecode } from "jwt-decode";
 import Swal from "sweetalert2";
+import endpoints from "../services/paths/paths";
 
 type TokenPayload = {
   sub: number;
@@ -29,7 +30,7 @@ export default function LoginPage() {
       const { access_token } = await loginService(username, password);
       const decoded: TokenPayload = jwtDecode(access_token);
       const userId = decoded.sub;
-      const res = await fetch(`http://localhost:3000/users/${userId}`);
+      const res = await fetch(endpoints.users.getOne(userId));
       if (!res.ok) {
         throw new Error("No se pudo obtener el perfil");
       }
